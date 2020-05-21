@@ -1,24 +1,29 @@
 const { Grid } = require('./lib/grid')
 
 const grid = new Grid([
-  ['W', 'W', 'W', 'W', 'W', 'W', 'W'],
-  ['W', 'A', 'A', 'W', 'A', 'A', 'W'],
-  ['W', 'A', 'A', 'W', 'A', 'A', 'W'],
-  ['W', 'A', 'A', 'W', 'A', 'A', 'O'],
-  ['W', 'A', 'A', 'W', 'W', 'A', 'W'],
-  ['W', 'A', 'A', 'A', 'A', 'A', 'W'],
-  ['W', 'W', 'W', 'W', 'W', 'W', 'W']
+  ['W', 'W', 'W', 'W', 'W', 'O', 'W', 'W', 'W', 'W', 'W', 'W', 'W'],
+  ['W', 'A', 'A', 'W', 'A', 'A', 'W', 'A', 'A', 'W', 'A', 'A', 'W'],
+  ['W', 'A', 'A', 'W', 'A', 'A', 'W', 'A', 'A', 'W', 'A', 'A', 'W'],
+  ['W', 'A', 'A', 'W', 'A', 'A', 'W', 'A', 'A', 'W', 'A', 'A', 'W'],
+  ['W', 'A', 'A', 'W', 'W', 'A', 'W', 'A', 'A', 'W', 'W', 'A', 'W'],
+  ['W', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'W'],
+  ['W', 'W', 'A', 'W', 'W', 'W', 'W', 'W', 'A', 'W', 'W', 'W', 'W'],
+  ['W', 'A', 'A', 'W', 'A', 'A', 'W', 'A', 'A', 'W', 'A', 'A', 'W'],
+  ['W', 'A', 'A', 'W', 'A', 'A', 'W', 'A', 'A', 'W', 'A', 'A', 'W'],
+  ['W', 'A', 'A', 'W', 'A', 'A', 'W', 'A', 'A', 'W', 'A', 'A', 'W'],
+  ['W', 'A', 'A', 'W', 'W', 'A', 'W', 'A', 'A', 'W', 'W', 'A', 'W'],
+  ['W', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'W'],
+  ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W']
 ])
 
 let iteration = 0
-const outlet = grid.getBlock(6, 3)
+const outlet = grid.getBlock(5, 0)
 
 const loop = setInterval(() => {
   iteration++
-  grid.calculateAir(6, 3)
+  grid.calculateAir(5, 0)
   console.clear()
   grid.printGrid()
-  console.log('I TB Ch Op')
-  console.log(`${iteration} ${outlet.toBeCheckedTiles.length}  ${outlet.checkedTiles.length}  ${outlet.openTiles.length}`)
+  outlet.printStats(iteration)
   if (outlet.tileCheckDone) clearInterval(loop)
-}, 0)
+}, 100)

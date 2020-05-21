@@ -40,6 +40,15 @@ class GasOutlet extends Block {
     if (this.toBeCheckedTiles.length === 0) this.tileCheckDone = true
     return true
   }
+
+  printStats (iteration) {
+    function addSpaces (item, space) {
+      const len = space - item.toString().length
+      return item + ' '.repeat(len >= 0 ? len : 0)
+    }
+    console.log('### ToBeCh Checked Open')
+    console.log(`${addSpaces(iteration, 3)} ${addSpaces(this.toBeCheckedTiles.length, 5)}  ${addSpaces(this.checkedTiles.length, 6)}  ${this.openTiles.length}`)
+  }
 }
 
 module.exports = {
