@@ -25,18 +25,14 @@ class Grid {
   }
 
   printGrid () {
-    pump.openTiles.forEach(tile => { tile.gas = true })
-    pump.checkedTiles.forEach(tile => { tile.noGas = !pump.openTiles.includes(tile) })
-
     const printGrid = this.grid.map(row => {
       return row.map(tile => {
-        // const spaces = ' '.repeat(1 - tile.timesChecked.toString().length)
-        // let name = tile.timesChecked.toString() + spaces
-
         let name = tile.name[0]
-        if (tile === active) name = name.yellow
-        if (tile.gas) name = name.green
-        if (tile.noGas) name = name.red
+        if (pump.openTiles.includes(tile)) name = name.green
+        if (
+          pump.checkedTiles.includes(tile) &&
+          !pump.openTiles.includes(tile)
+        ) name = name.red
         if (tile.name === 'Pump') { name = name.blue }
         if (tile.name === 'Wall') { name = name.gray }
         if (tile.name === 'Air') { name = name.white }
@@ -83,7 +79,7 @@ class Grid {
     const pump = this.getBlock(x, y)
     if (!(pump instanceof GasOutlet)) throw Error('Not a gas outlet')
 
-    pump.checkNextTile2()
+    pump.checkNextTile()
   }
 }
 
@@ -93,9 +89,6 @@ class Block {
     this.name = name
     this.pos = { x: 0, y: 0 }
     this.gasThroughput = gasThroughput
-    this.gas = false
-    this.noGas = false
-    this.timesChecked = 0
   }
 }
 
@@ -107,43 +100,22 @@ class GasOutlet extends Block {
     this.checkedTiles = []
     this.toBeCheckedTiles = []
     this.tileCheckDone = false
+    this.currentTile = undefined
   }
 
-  checkNextTile () {
-    const { x, y } = this.pos
-
-    if (this.tileCheckDone) return false
-    if (this.toBeCheckedTiles.length === 0) this.addNeighboursToBeChecked(x, y)
-    const tile = this.toBeCheckedTiles.shift()
-    active = tile
-
-    this.checkedTiles.push(tile)
-    tile.timesChecked++
-
-    if (tile.gasThroughput > 0) {
-      this.openTiles.push(tile)
-      this.addNeighboursToBeChecked(tile.pos.x, tile.pos.y)
+  checkNextTile (reset) {
+    if (reset) {
+      this.openTiles = []
+      this.checkedTiles = []
+      this.toBeCheckedTiles = []
+      this.tileCheckDone = false
     }
-    return true
-  }
-
-  addNeighboursToBeChecked (x, y) {
-    this.parentGrid.getNeighbours(x, y, true).forEach(neighbour => {
-      if (!this.checkedTiles.includes(neighbour)) {
-        this.toBeCheckedTiles.push(neighbour)
-      }
-    })
-  }
-
-  checkNextTile2 () {
     if (this.tileCheckDone) return false
     const tile = this.toBeCheckedTiles.length > 0 ? this.toBeCheckedTiles.shift() : this
-    active = tile
 
     const neighbours = this.parentGrid.getNeighbours(tile.pos.x, tile.pos.y, true)
     neighbours.forEach(neighbour => {
       if (this.checkedTiles.includes(neighbour)) return
-      neighbour.timesChecked++
       this.checkedTiles.push(neighbour)
       if (neighbour.gasThroughput > 0) {
         this.openTiles.push(neighbour)
@@ -161,9 +133,6 @@ function cAir () { return new Block(undefined, 'Air', 100) }
 function cWall () { return new Block(undefined, 'Wall') }
 function cPump () { return new GasOutlet(undefined, 'Pump', 20) }
 
-// console.log(grid.getBlock(6,3))
-let active
-const done = false
 let iteration = 0
 const pump = grid.getBlock(6, 3)
 
@@ -176,6 +145,3 @@ const loop = setInterval(() => {
   console.log(`${iteration} ${pump.toBeCheckedTiles.length}  ${pump.checkedTiles.length}  ${pump.openTiles.length}`)
   if (pump.tileCheckDone) clearInterval(loop)
 }, 200)
-
-// console.log(grid.getNeighbours(5, 1, true))
-// console.log(grid.getBlock({ x: 5, y: 0 }))
