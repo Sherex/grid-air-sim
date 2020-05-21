@@ -1,3 +1,9 @@
+# Local development directories
+development
+
+# VSCode workspace settings
+.vscode
+
 # Logs
 logs
 *.log
