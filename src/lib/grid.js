@@ -50,15 +50,6 @@ class Grid {
   }
 
   getBlock (x, y) {
-    if (
-      x !== undefined &&
-      y === undefined &&
-      x.x !== undefined &&
-      x.y !== undefined
-    ) {
-      y = x.y
-      x = x.x
-    }
     try {
       return this.grid[y][x]
     } catch (error) {
@@ -83,7 +74,7 @@ class Grid {
     ]
     if (asTile) {
       return neighbours
-        .map(n => this.getBlock(n))
+        .map(n => this.getBlock(n.x, n.y))
         .filter(n => n !== undefined)
     }
     return neighbours
