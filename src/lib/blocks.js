@@ -41,13 +41,19 @@ class GasOutlet extends Block {
     return true
   }
 
-  printStats (iteration) {
+  printStats () {
     function addSpaces (item, space) {
       const len = space - item.toString().length
       return item + ' '.repeat(len >= 0 ? len : 0)
     }
-    console.log('### ToBeCh Checked Open')
-    console.log(`${addSpaces(iteration, 3)} ${addSpaces(this.toBeCheckedTiles.length, 5)}  ${addSpaces(this.checkedTiles.length, 6)}  ${this.openTiles.length}`)
+    console.log('X  Y - ToBeCh Checked Open')
+    const stats = [
+      `${addSpaces(this.pos.x, 2)} ${addSpaces(this.pos.y, 2)}  `,
+      `${addSpaces(this.toBeCheckedTiles.length, 5)}  `,
+      `${addSpaces(this.checkedTiles.length, 6)}  `,
+      `${this.openTiles.length}`
+    ]
+    console.log(stats.join(''))
   }
 }
 
