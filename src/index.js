@@ -7,18 +7,20 @@ const grid = new Grid([
   ['W', 'A', 'A', 'W', 'A', 'A', 'W', 'A', 'A', 'W', 'A', 'A', 'W'],
   ['W', 'A', 'A', 'W', 'W', 'A', 'W', 'A', 'A', 'W', 'W', 'A', 'W'],
   ['W', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'W'],
-  ['W', 'W', 'A', 'W', 'W', 'W', 'W', 'W', 'A', 'W', 'W', 'W', 'W'],
-  ['W', 'A', 'A', 'W', 'A', 'A', 'W', 'A', 'A', 'W', 'A', 'A', 'W'],
-  ['W', 'A', 'A', 'W', 'A', 'A', 'W', 'A', 'A', 'W', 'A', 'A', 'W'],
-  ['W', 'A', 'A', 'W', 'A', 'A', 'W', 'A', 'A', 'W', 'A', 'A', 'W'],
-  ['W', 'A', 'A', 'W', 'W', 'A', 'W', 'A', 'A', 'W', 'W', 'A', 'W'],
-  ['W', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'W'],
-  ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'O', 'W', 'W', 'W', 'W', 'W']
+  ['W', 'W', 'A', 'W', 'W', 'W', 'W', 'W', 'V', 'W', 'W', 'W', 'W'],
+  ['W', 'A', 'A', 'W', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'W'],
+  ['W', 'A', 'A', 'W', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'W'],
+  ['W', 'A', 'A', 'W', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'W'],
+  ['W', 'A', 'A', 'W', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'W'],
+  ['W', 'A', 'A', 'V', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'W'],
+  ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W']
 ])
 
-const loop = setInterval(() => {
-  grid.calculateAir()
+setInterval(() => {
+  grid.nextIteration()
   console.clear()
-  grid.printGrid(true, false)
-  if (grid.allOutletChecksDone) clearInterval(loop)
-}, 100)
+  grid.printGrid({
+    printOutletStats: true,
+    showTimesChecked: true
+  })
+}, 0)

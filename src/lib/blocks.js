@@ -14,8 +14,32 @@ class Block {
     this.parentGrid = params.parentGrid
     this.name = params.name
     this.pos = { x: params.x || 0, y: params.y || 0 }
-    this.gasThroughput = params.gasThroughput
+    this.gasThroughput = params.gasThroughput || 0
+    this.gasAmount = 0
     this.timesChecked = 0
+  }
+
+  transferGas () {
+    if (this.gasAmount <= 0) return
+    const neighbours = this.parentGrid.getNeighbours(this.pos.x, this.pos.y, true)
+    let totalGasToTransfer = 0
+    const neighbourToReceiveGas = []
+    neighbours.forEach(neighbour => {
+      if (neighbour.gasThroughput === 0 || neighbour.gasAmount >= this.gasAmount) return
+
+      let maxGasToTransfer = this.gasThroughput > neighbour.gasThroughput ? neighbour.gasThroughput : this.gasThroughput
+      if (this instanceof GasOutlet) { maxGasToTransfer = neighbour.gasThroughput }
+
+      let gasToTransfer = (this.gasAmount - totalGasToTransfer) - neighbour.gasAmount
+      gasToTransfer = gasToTransfer > maxGasToTransfer ? maxGasToTransfer : gasToTransfer
+      totalGasToTransfer += gasToTransfer
+      neighbourToReceiveGas.push(neighbour)
+    })
+
+    neighbourToReceiveGas.forEach(neighbour => {
+      neighbour.gasAmount += Math.floor(totalGasToTransfer / neighbourToReceiveGas.length)
+      this.gasAmount -= Math.floor(totalGasToTransfer / neighbourToReceiveGas.length)
+    })
   }
 }
 
@@ -42,6 +66,10 @@ class GasOutlet extends Block {
     this.toBeCheckedTiles = []
     this.tileCheckDone = false
     this.currentTile = undefined
+  }
+
+  fillGasAmount () {
+    this.gasAmount = this.gasEmitAmount
   }
 
   checkNextTile (reset) {

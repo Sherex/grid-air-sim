@@ -17,11 +17,17 @@ class Grid {
     this.assignCoords()
   }
 
+  nextIteration () {
+    if (!this.allOutletChecksDone) this.findOpenTilesPerOutlet()
+    if (this.allOutletChecksDone) this.equalizeGas()
+  }
+
   assignBlocks (stringGrid) {
     return this.loopGrid(stringGrid, (tile) => {
       if (tile === 'W') tile = new Block({ name: 'Wall' })
-      else if (tile === 'A') tile = new Block({ name: 'Air', gasThroughput: 100 })
-      else if (tile === 'O') tile = new GasOutlet({ name: 'Outlet', gasEmitAmount: 20 })
+      else if (tile === 'A') tile = new Block({ name: 'Air', gasThroughput: 30 })
+      else if (tile === 'V') tile = new Block({ name: 'Vent', gasThroughput: 5 })
+      else if (tile === 'O') tile = new GasOutlet({ name: 'Outlet', gasEmitAmount: 100 })
       const type = tile.constructor.name
       this.blocks[type] ? this.blocks[type].push(tile) : this.blocks[type] = [tile]
       return tile
@@ -36,24 +42,23 @@ class Grid {
     })
   }
 
-  printGrid (printOutletStats, showTimesChecked) {
+  printGrid ({ printOutletStats, showTimesChecked }) {
     const printGrid = this.grid.map(row => {
       return row.map(tile => {
-        let name = showTimesChecked ? tile.timesChecked.toString() : tile.name[0]
+        let name = addSpaces(tile.name[0], 3)
         if (tile.name === 'Outlet') { name = name.blue }
+        if (showTimesChecked && tile.gasAmount > 0) {
+          name = addSpaces(tile.gasAmount.toString(), 3)
+        }
 
         this.blocks.GasOutlet.forEach(outlet => {
           if (outlet.openTiles.includes(tile)) name = name.green
-          if (
-            outlet.checkedTiles.includes(tile) &&
-            !outlet.openTiles.includes(tile)
-          ) name = name.red
         })
 
         if (tile.name === 'Wall') { name = name.gray }
         if (tile.name === 'Air') { name = name.white }
         return name
-      }).join(' ')
+      }).join('')
     }).join('\n')
 
     console.log(printGrid)
@@ -97,7 +102,7 @@ class Grid {
     return neighbours
   }
 
-  calculateAir () {
+  findOpenTilesPerOutlet () {
     const checksDone = this.blocks.GasOutlet.map(outlet => {
       if (outlet.tileCheckDone) return true
       outlet.checkNextTile()
@@ -105,6 +110,22 @@ class Grid {
     })
     if (!checksDone.includes(false)) this.allOutletChecksDone = true
   }
+
+  equalizeGas () {
+    this.blocks.GasOutlet.forEach(outlet => {
+      outlet.fillGasAmount()
+      const tileToEqualize = [
+        ...this.blocks.GasOutlet,
+        ...outlet.openTiles
+      ]
+      tileToEqualize.forEach(tile => tile.transferGas())
+    })
+  }
 }
 
 module.exports = { Grid }
+
+function addSpaces (item, space) {
+  const len = space - item.toString().length
+  return item + ' '.repeat(len >= 0 ? len : 0)
+}
