@@ -16,10 +16,7 @@ const grid = new Grid([
   ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'O', 'W', 'W', 'W', 'W', 'W']
 ])
 
-let iteration = 0
-
 const loop = setInterval(() => {
-  iteration++
   grid.calculateAir()
   console.clear()
   grid.printGrid(true, false)
