@@ -4,14 +4,13 @@ const { Block, GasOutlet } = require('./blocks')
 class Grid {
   constructor (grid) {
     if (!grid) throw Error('Parameter grid <String[][]> required')
-    this.grid = grid
     this.blocks = {}
-    this.assignBlocks()
+    this.grid = this.assignBlocks(grid)
     this.assignCoords()
   }
 
-  assignBlocks () {
-    this.grid = this.loopGrid((tile) => {
+  assignBlocks (stringGrid) {
+    return this.loopGrid(stringGrid, (tile) => {
       if (tile === 'W') tile = new Block(undefined, 'Wall')
       else if (tile === 'A') tile = new Block(undefined, 'Air', 100)
       else if (tile === 'O') tile = new GasOutlet(undefined, 'Outlet', 20)
@@ -57,8 +56,12 @@ class Grid {
     }
   }
 
-  loopGrid (callback) {
-    return this.grid.map((row, y) => {
+  loopGrid (grid, callback) {
+    if (typeof grid === 'function') {
+      callback = grid
+      grid = this.grid
+    }
+    return grid.map((row, y) => {
       return row.map((tile, x) => {
         return callback(tile, row, x, y)
       })
