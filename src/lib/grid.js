@@ -1,7 +1,14 @@
 require('colors')
 const { Block, GasOutlet } = require('./blocks')
 
+/**
+ * Class that creates and manipulates a grid
+ */
 class Grid {
+  /**
+   * Converts the provided 2D array of strings into a grid
+   * @param {string[][]} grid 2D array of string to be converted into a grid of Blocks
+   */
   constructor (grid) {
     if (!grid) throw Error('Parameter grid <String[][]> required')
     this.allOutletChecksDone = false
@@ -12,9 +19,9 @@ class Grid {
 
   assignBlocks (stringGrid) {
     return this.loopGrid(stringGrid, (tile) => {
-      if (tile === 'W') tile = new Block(undefined, 'Wall')
-      else if (tile === 'A') tile = new Block(undefined, 'Air', 100)
-      else if (tile === 'O') tile = new GasOutlet(undefined, 'Outlet', 20)
+      if (tile === 'W') tile = new Block({ name: 'Wall' })
+      else if (tile === 'A') tile = new Block({ name: 'Air', gasThroughput: 100 })
+      else if (tile === 'O') tile = new GasOutlet({ name: 'Outlet', gasEmitAmount: 20 })
       const type = tile.constructor.name
       this.blocks[type] ? this.blocks[type].push(tile) : this.blocks[type] = [tile]
       return tile

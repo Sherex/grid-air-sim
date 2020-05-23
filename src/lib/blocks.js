@@ -1,16 +1,41 @@
+/** Class that creates a block */
 class Block {
-  constructor (parentGrid, name, gasThroughput = 0) {
-    this.parentGrid = parentGrid
-    this.name = name
-    this.pos = { x: 0, y: 0 }
-    this.gasThroughput = gasThroughput
+  /**
+   * Creates a block to be placed in the grid
+   * @typedef {constructor} Block
+   * @param {object} params Contains parameters
+   * @param {*} params.parentGrid The grid this block is located within
+   * @param {string} params.name The name of this block (ex. 'Wall', 'Air')
+   * @param {number} params.x The x coordinate of this block within it's parentGrid
+   * @param {number} params.y The y coordinate of this block within it's parentGrid
+   * @param {number} params.gasThroughput The amount of gas this block can move in one iteration
+   */
+  constructor (params) {
+    this.parentGrid = params.parentGrid
+    this.name = params.name
+    this.pos = { x: params.x || 0, y: params.y || 0 }
+    this.gasThroughput = params.gasThroughput
   }
 }
 
+/**
+ * Class that creates a gas outlet
+ * @extends Block
+ */
 class GasOutlet extends Block {
-  constructor (parentGrid, name, gasEmitter = 0) {
-    super(parentGrid, name)
-    this.gasEmitter = gasEmitter
+  /**
+   * Creates a block that emits gas and finds all blocks it's connected to
+   * @param {object} params Contains parameters
+   * @param {*} params.parentGrid The grid this block is located within
+   * @param {string} params.name The name of this block (ex. 'Wall', 'Air')
+   * @param {number} params.x The x coordinate of this block within it's parentGrid
+   * @param {number} params.y The y coordinate of this block within it's parentGrid
+   * @param {number} params.gasThroughput The amount of gas this block can move in one iteration
+   * @param {number} params.gasEmitAmount The amount of gas this block emits in one iteration
+   */
+  constructor (params) {
+    super(params)
+    this.gasEmitAmount = params.gasEmitAmount
     this.openTiles = []
     this.checkedTiles = []
     this.toBeCheckedTiles = []
