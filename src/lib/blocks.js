@@ -15,6 +15,7 @@ class Block {
     this.name = params.name
     this.pos = { x: params.x || 0, y: params.y || 0 }
     this.gasThroughput = params.gasThroughput
+    this.timesChecked = 0
   }
 }
 
@@ -57,6 +58,7 @@ class GasOutlet extends Block {
     neighbours.forEach(neighbour => {
       if (this.checkedTiles.includes(neighbour)) return
       this.checkedTiles.push(neighbour)
+      neighbour.timesChecked++
       if (neighbour.gasThroughput > 0) {
         this.openTiles.push(neighbour)
         this.toBeCheckedTiles.push(neighbour)

@@ -22,6 +22,6 @@ const loop = setInterval(() => {
   iteration++
   grid.calculateAir()
   console.clear()
-  grid.printGrid(true)
+  grid.printGrid(true, false)
   if (grid.allOutletChecksDone) clearInterval(loop)
 }, 100)

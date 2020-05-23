@@ -36,10 +36,10 @@ class Grid {
     })
   }
 
-  printGrid (printOutletStats) {
+  printGrid (printOutletStats, showTimesChecked) {
     const printGrid = this.grid.map(row => {
       return row.map(tile => {
-        let name = tile.name[0]
+        let name = showTimesChecked ? tile.timesChecked.toString() : tile.name[0]
         this.blocks.GasOutlet.forEach(outlet => {
           if (outlet.openTiles.includes(tile)) name = name.green
           if (
