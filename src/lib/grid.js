@@ -42,15 +42,16 @@ class Grid {
     })
   }
 
-  printGrid ({ printOutletStats, showTimesChecked }) {
+  printGrid ({ printOutletStats, showAmountOfGas }) {
     const printGrid = this.grid.map(row => {
       return row.map(tile => {
         let name = addSpaces(tile.name[0], 3)
-        if (tile.name === 'Outlet') { name = name.blue }
-        if (showTimesChecked && tile.gasAmount > 0) {
+        if (showAmountOfGas && tile.gasAmount > 0) {
           name = addSpaces(tile.gasAmount.toString(), 3)
         }
 
+        if (tile.name === 'Outlet') { name = name.blue }
+        if (tile.name === 'Vent') { name = name.magenta }
         this.blocks.GasOutlet.forEach(outlet => {
           if (outlet.openTiles.includes(tile)) name = name.green
         })

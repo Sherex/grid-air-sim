@@ -16,11 +16,18 @@ const grid = new Grid([
   ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W']
 ])
 
-setInterval(() => {
-  grid.nextIteration()
-  console.clear()
-  grid.printGrid({
-    printOutletStats: true,
-    showTimesChecked: true
-  })
-}, 0)
+;(async () => {
+  while (true) {
+    grid.nextIteration()
+    console.clear()
+    grid.printGrid({
+      printOutletStats: true,
+      showAmountOfGas: true
+    })
+    await timeout(100)
+  }
+})()
+
+function timeout (ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
