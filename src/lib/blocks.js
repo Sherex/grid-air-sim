@@ -30,7 +30,7 @@ class Block {
       let maxGasToTransfer = this.gasThroughput > neighbour.gasThroughput ? neighbour.gasThroughput : this.gasThroughput
       if (this instanceof GasOutlet) { maxGasToTransfer = neighbour.gasThroughput }
 
-      let gasToTransfer = (this.gasAmount - totalGasToTransfer) - neighbour.gasAmount
+      let gasToTransfer = ((this.gasAmount - totalGasToTransfer) - neighbour.gasAmount) / 2
       gasToTransfer = gasToTransfer > maxGasToTransfer ? maxGasToTransfer : gasToTransfer
       totalGasToTransfer += gasToTransfer
       neighbourToReceiveGas.push(neighbour)
