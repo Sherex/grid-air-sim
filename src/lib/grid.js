@@ -40,6 +40,8 @@ class Grid {
     const printGrid = this.grid.map(row => {
       return row.map(tile => {
         let name = showTimesChecked ? tile.timesChecked.toString() : tile.name[0]
+        if (tile.name === 'Outlet') { name = name.blue }
+
         this.blocks.GasOutlet.forEach(outlet => {
           if (outlet.openTiles.includes(tile)) name = name.green
           if (
@@ -47,7 +49,7 @@ class Grid {
             !outlet.openTiles.includes(tile)
           ) name = name.red
         })
-        if (tile.name === 'Outlet') { name = name.blue }
+
         if (tile.name === 'Wall') { name = name.gray }
         if (tile.name === 'Air') { name = name.white }
         return name
