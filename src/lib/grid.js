@@ -4,6 +4,7 @@ const { Block, GasOutlet } = require('./blocks')
 class Grid {
   constructor (grid) {
     if (!grid) throw Error('Parameter grid <String[][]> required')
+    this.allOutletChecksDone = false
     this.blocks = {}
     this.grid = this.assignBlocks(grid)
     this.assignCoords()
@@ -28,16 +29,17 @@ class Grid {
     })
   }
 
-  printGrid () {
+  printGrid (printOutletStats) {
     const printGrid = this.grid.map(row => {
       return row.map(tile => {
         let name = tile.name[0]
-        const outlet = this.blocks.GasOutlet[0]
-        if (outlet.openTiles.includes(tile)) name = name.green
-        if (
-          outlet.checkedTiles.includes(tile) &&
-          !outlet.openTiles.includes(tile)
-        ) name = name.red
+        this.blocks.GasOutlet.forEach(outlet => {
+          if (outlet.openTiles.includes(tile)) name = name.green
+          if (
+            outlet.checkedTiles.includes(tile) &&
+            !outlet.openTiles.includes(tile)
+          ) name = name.red
+        })
         if (tile.name === 'Outlet') { name = name.blue }
         if (tile.name === 'Wall') { name = name.gray }
         if (tile.name === 'Air') { name = name.white }
@@ -46,6 +48,9 @@ class Grid {
     }).join('\n')
 
     console.log(printGrid)
+    if (printOutletStats) {
+      this.blocks.GasOutlet.forEach(outlet => { outlet.printStats() })
+    }
   }
 
   getBlock (x, y) {
@@ -83,11 +88,13 @@ class Grid {
     return neighbours
   }
 
-  calculateAir (x, y) {
-    const outlet = this.getBlock(x, y)
-    if (!(outlet instanceof GasOutlet)) throw Error('Not a gas outlet')
-
-    outlet.checkNextTile()
+  calculateAir () {
+    const checksDone = this.blocks.GasOutlet.map(outlet => {
+      if (outlet.tileCheckDone) return true
+      outlet.checkNextTile()
+      return false
+    })
+    if (!checksDone.includes(false)) this.allOutletChecksDone = true
   }
 }
 
