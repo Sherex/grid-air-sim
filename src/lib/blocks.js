@@ -23,22 +23,23 @@ class Block {
     if (this.gasAmount <= 0) return
     const neighbours = this.parentGrid.getNeighbours(this.pos.x, this.pos.y, true)
     let totalGasToTransfer = 0
-    const neighbourToReceiveGas = []
+    const neighboursToReceiveGas = []
     neighbours.forEach(neighbour => {
       if (neighbour.gasThroughput === 0 || neighbour.gasAmount >= this.gasAmount) return
 
-      let maxGasToTransfer = this.gasThroughput > neighbour.gasThroughput ? neighbour.gasThroughput : this.gasThroughput
-      if (this instanceof GasOutlet) { maxGasToTransfer = neighbour.gasThroughput }
+      let lowestThroughput = this.gasThroughput > neighbour.gasThroughput ? neighbour.gasThroughput : this.gasThroughput
+      if (this instanceof GasOutlet) { lowestThroughput = neighbour.gasThroughput }
 
-      let gasToTransfer = ((this.gasAmount - totalGasToTransfer) - neighbour.gasAmount) / 2
-      gasToTransfer = gasToTransfer > maxGasToTransfer ? maxGasToTransfer : gasToTransfer
+      let gasToTransfer = ((this.gasAmount - totalGasToTransfer) - neighbour.gasAmount) * 0.5
+      gasToTransfer = gasToTransfer > lowestThroughput ? lowestThroughput : gasToTransfer
       totalGasToTransfer += gasToTransfer
-      neighbourToReceiveGas.push(neighbour)
+      neighboursToReceiveGas.push({ neighbour, gasToTransfer })
     })
 
-    neighbourToReceiveGas.forEach(neighbour => {
-      neighbour.gasAmount += Math.floor(totalGasToTransfer / neighbourToReceiveGas.length)
-      this.gasAmount -= Math.floor(totalGasToTransfer / neighbourToReceiveGas.length)
+    neighboursToReceiveGas.forEach(({ neighbour, gasToTransfer }) => {
+      gasToTransfer = Math.floor(totalGasToTransfer * (gasToTransfer / totalGasToTransfer))
+      neighbour.gasAmount += gasToTransfer
+      this.gasAmount -= gasToTransfer
     })
   }
 }
