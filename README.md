@@ -10,9 +10,13 @@ Then adds it to the "checkedTiles" array, and to "openTiles" if it's open.
 When it is done checking for open tiles, the outlets begin to push "gas" out to it's open neighbours. Then all open tiles that has more than 0 gas will try to equilize the gas between them. Based on the difference of gas between them and their max throughput.
 
 ### Preview:
-![Alt Text](terminal.gif)  
-(delay of 100ms between each iteration)  
-(Will update when I've crushed some bugs)
+Legend:  
+W - Wall - Grey  
+A - Open space - White/Green  
+V - Vent (restricted air flow - Magenta  
+![V2Preview](assets/terminal-with-amount.gif)
+![V1Preview](assets/terminal.gif)  
+(delay of 100ms between each iteration)
 
 ## How to run
 ```sh
