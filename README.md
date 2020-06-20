@@ -24,7 +24,7 @@ $ git clone https://github.com/Sherex/grid-air-sim.git
 $ cd grid-air-sim
 $ npm i
 ```
-Edit `index.html` to your liking, for example editing the grid.
+Edit `index.js` to your liking, for example editing the grid.
 ```sh
 $ npm start
 ```
