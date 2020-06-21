@@ -30,20 +30,21 @@ function setup () {
 function draw () {
   background(220)
   grid.loopGrid((tile, row, x, y) => {
-    fill(getColor(tile.name, tile.gasAmount))
+    fill(getColor(tile.name, tile.gasAmount).block)
     rect(x * squareWidth, y * squareHeight, squareWidth, squareHeight)
-    fill(color(0, 0, 0))
-    text(tile.name, x * squareWidth, y * squareHeight + squareHeight / 2)
-    if (tile.gasAmount > 0) text(tile.gasAmount, x * squareWidth, (y * squareHeight + squareHeight / 2) + 20)
+    fill(getColor(tile.name, tile.gasAmount).text)
+    text(tile.name, x * squareWidth + squareWidth / 2, y * squareHeight + squareHeight / 2)
+    textAlign(CENTER, CENTER)
+    if (tile.gasAmount > 0) text(tile.gasAmount, x * squareWidth + squareWidth / 2, (y * squareHeight + squareHeight / 2) + 20)
   })
   grid.nextIteration()
   fill(255, 255, 255)
 }
 
 function getColor (name, val) {
-  if (name === 'Wall') return color(32, 32, 32)
-  else if (name === 'Air') return color(128, 255 / 100 * val, 128)
-  else if (name === 'Outlet') return color(0, 128, 255)
-  else if (name === 'Vent') return color(255, 0, 255)
-  else if (name === 'BigVent') return color(255, 0, 255)
+  if (name === 'Wall') return { block: color(32, 32, 32), text: color(128, 128, 128) }
+  else if (name === 'Air') return { block: color(128, 255 / 100 * val, 128), text: color(0, 0, 0) }
+  else if (name === 'Outlet') return { block: color(0, 128, 255), text: color(0, 0, 0) }
+  else if (name === 'Vent') return { block: color(255, 0, 255), text: color(0, 0, 0) }
+  else if (name === 'BigVent') return { block: color(255, 0, 255), text: color(0, 0, 0) }
 }
