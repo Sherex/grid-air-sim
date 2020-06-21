@@ -1,3 +1,6 @@
+# Webpack output
+dist
+
 # Local development directories
 development
 

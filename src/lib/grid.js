@@ -1,4 +1,10 @@
-require('colors')
+let hasColors
+try {
+  require('colors')
+  hasColors = true
+} catch (error) {
+  hasColors = false
+}
 const { Block, GasOutlet } = require('./blocks')
 
 /**
@@ -49,15 +55,16 @@ class Grid {
         if (showAmountOfGas && tile.gasAmount > 0) {
           name = addSpaces(tile.gasAmount.toString(), 3)
         }
+        if (hasColors) {
+          if (tile.name === 'Outlet') { name = name.blue }
+          if (tile.name === 'Vent') { name = name.magenta }
+          this.blocks.GasOutlet.forEach(outlet => {
+            if (outlet.openTiles.includes(tile)) name = name.green
+          })
 
-        if (tile.name === 'Outlet') { name = name.blue }
-        if (tile.name === 'Vent') { name = name.magenta }
-        this.blocks.GasOutlet.forEach(outlet => {
-          if (outlet.openTiles.includes(tile)) name = name.green
-        })
-
-        if (tile.name === 'Wall') { name = name.gray }
-        if (tile.name === 'Air') { name = name.white }
+          if (tile.name === 'Wall') { name = name.gray }
+          if (tile.name === 'Air') { name = name.white }
+        }
         return name
       }).join('')
     }).join('\n')

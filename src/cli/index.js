@@ -1,4 +1,4 @@
-const { Grid } = require('./lib/grid')
+const { Grid } = require('../')
 
 const grid = new Grid([
   ['W', 'W', 'W', 'W', 'W', 'O', 'W', 'W', 'W', 'W', 'W', 'W', 'W'],

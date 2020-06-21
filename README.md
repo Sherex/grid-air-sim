@@ -24,11 +24,52 @@ $ git clone https://github.com/Sherex/grid-air-sim.git
 $ cd grid-air-sim
 $ npm i
 ```
-Edit `index.js` to your liking, for example editing the grid.
+### CLI
+Edit `src/cli/index.js` to your liking, for example editing the grid.
 ```sh
 $ npm start
 ```
 
+### Web
+Edit `src/web/sketch.js` to your liking, for example editing the grid.
+```sh
+$ npm run build # Run webpack
+$ npm run web   # Run live-server and open browser
+```
+For easier development you should run
+`npm run build -- -w` (watch mode) in one terminal and `npm run web` in another.
+
+### As a lib
+You can import it as a lib too:
+```js
+const { Grid } = require('path/to/lib/grid-air-sim')
+
+const grid = new Grid([
+  ['W', 'W', 'W', 'W', 'W', 'O', 'W'],
+  ['W', 'A', 'A', 'W', 'A', 'A', 'W'],
+  ['W', 'A', 'A', 'W', 'A', 'A', 'W'],
+  ['W', 'A', 'A', 'W', 'A', 'A', 'W'],
+  ['W', 'A', 'A', 'W', 'W', 'A', 'W'],
+  ['W', 'A', 'A', 'A', 'A', 'A', 'W'],
+  ['W', 'W', 'W', 'W', 'W', 'W', 'W']
+])
+
+;(async () => {
+  while (true) {
+    grid.nextIteration()
+    console.clear()
+    grid.printGrid({
+      printOutletStats: true,
+      showAmountOfGas: true
+    })
+    await timeout(100)
+  }
+})()
+
+function timeout (ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+```
 
 ## Development
 ```sh
