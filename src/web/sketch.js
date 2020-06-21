@@ -36,7 +36,7 @@ function draw () {
     text(tile.name, x * squareWidth, y * squareHeight + squareHeight / 2)
     if (tile.gasAmount > 0) text(tile.gasAmount, x * squareWidth, (y * squareHeight + squareHeight / 2) + 20)
   })
-  grid.nextIteration(i > 300)
+  grid.nextIteration()
   fill(255, 255, 255)
 }
 
