@@ -10,7 +10,8 @@
     "start": "node src/cli",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "web": "live-server ./dist/"
+    "web": "live-server ./dist/",
+    "nix-dev": "(npm run build -- -w & npm run web)"
   },
   "keywords": [],
   "author": "",

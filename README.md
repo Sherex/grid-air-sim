@@ -33,10 +33,13 @@ $ npm start
 ### Web
 Edit `src/web/sketch.js` to your liking, for example editing the grid.
 ```sh
+# Linux / Mac
+$ npm run nix-dev # Runs build and web scripts concurrently
+# Windows
 $ npm run build # Run webpack
 $ npm run web   # Run live-server and open browser
 ```
-For easier development you should run
+For easier development on Windows you should run
 `npm run build -- -w` (watch mode) in one terminal and `npm run web` in another.
 
 ### As a lib
