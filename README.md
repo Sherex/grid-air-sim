@@ -1,8 +1,6 @@
 # Grid-Air-Sim
 
-Random idea I got to simulate gas in an 2D array. Nothing fancy just pathfinding and checking if the tile is open or not. It now also simulates gas movements between tiles based on the throughput of each tile.
-
-It is probably unoptimized, but it currently does ~7500 ops/s (in a while loop and not printing to console).
+Random idea I got to simulate gas in an 2D array. It does some pathfinding, then checks if the tile is open or not. It now also simulates gas movements between tiles based on the throughput of each tile.
 
 ![WebPreview](./assets/web-preview.gif)
 
